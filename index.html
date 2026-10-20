@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1f6a4d" />
+    <meta
+      name="description"
+      content="Jardim Check — Autoinspeção Sanitária PWA para Padaria e Confeitaria Jardim."
+    />
+    <title>Jardim Check</title>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="topbar no-print">
+      <div class="brand">
+        <div class="brand-mark">J</div>
+        <div>
+          <strong>Jardim Check</strong>
+          <small>Autoinspeção Sanitária</small>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegação principal">
+        <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+        <button class="nav-btn" data-view="newInspection">Nova inspeção</button>
+        <button class="nav-btn" data-view="history">Histórico</button>
+      </nav>
+    </header>
+
+    <main class="main-content">
+      <section id="dashboardView" class="view active">
+        <div class="hero card">
+          <div>
+            <p class="eyebrow">Padaria e Confeitaria Jardim</p>
+            <h1>Monitoramento sanitário em tempo real</h1>
+            <p class="hero-copy">
+              Acompanhe higiene, segurança alimentar e organização dos setores com inspeções rápidas,
+              documentadas e confiáveis.
+            </p>
+            <div class="hero-actions">
+              <button id="startInspectionBtn" class="primary-btn">+ Iniciar Nova Inspeção</button>
+              <button id="installBtn" class="secondary-btn hidden-install">Instalar app</button>
+            </div>
+          </div>
+
+          <div class="hero-badge">
+            <div class="badge-mini">Sistema</div>
+            <strong>Jardim Check</strong>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card green">
+            <div class="stat-icon">📋</div>
+            <div>
+              <label>Total de inspeções</label>
+              <strong id="totalInspections">0</strong>
+            </div>
+          </article>
+
+          <article class="stat-card blue">
+            <div class="stat-icon">📈</div>
+            <div>
+              <label>Índice médio</label>
+              <strong id="avgIndex">0%</strong>
+            </div>
+          </article>
+
+          <article class="stat-card yellow">
+            <div class="stat-icon">⚠️</div>
+            <div>
+              <label>Não conformes pendentes</label>
+              <strong id="pendingItems">0</strong>
+            </div>
+          </article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel card">
+            <div class="panel-header">
+              <h2>Histórico recente</h2>
+              <button class="text-btn" data-view="history">Ver tudo</button>
+            </div>
+            <div id="recentHistoryList" class="recent-list"></div>
+          </section>
+
+          <aside class="panel card">
+            <div class="panel-header">
+              <h2>Resumo operacional</h2>
+            </div>
+            <div class="summary-list" id="summaryList"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="newInspectionView" class="view hidden">
+        <div class="panel card form-panel">
+          <div class="panel-header centered-header">
+            <div>
+              <p class="eyebrow alt">Nova inspeção</p>
+              <h2>Dados da visita</h2>
+            </div>
+          </div>
+
+          <form id="newInspectionForm" class="inspection-form">
+            <div class="field-group">
+              <label for="sectorSelect">Setor</label>
+              <select id="sectorSelect" required></select>
+            </div>
+
+            <div class="field-group">
+              <label for="responsibleInput">Responsável pela inspeção</label>
+              <input id="responsibleInput" type="text" placeholder="Nome do responsável" required />
+            </div>
+
+            <div class="field-group">
+              <label for="inspectionDate">Data da inspeção</label>
+              <input id="inspectionDate" type="date" required />
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="secondary-btn" data-view="dashboard">Voltar</button>
+              <button type="submit" class="primary-btn">Iniciar checklist</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="inspectionView" class="view hidden">
+        <div class="panel card checklist-panel">
+          <div class="inspection-topbar">
+            <div>
+              <p class="eyebrow alt" id="inspectionSectorLabel">Setor</p>
+              <h2 id="inspectionTitle">Checklist</h2>
+            </div>
+            <span class="status-chip" id="inspectionResponsibleBadge">Responsável</span>
+          </div>
+
+          <div class="progress-box">
+            <div class="progress-meta">
+              <span id="questionProgressText">Pergunta 1 de 1</span>
+              <span id="questionPercentText">0%</span>
+            </div>
+            <div class="progress-bar">
+              <span id="inspectionProgressBar"></span>
+            </div>
+          </div>
+
+          <div id="questionCard" class="question-card"></div>
+
+          <div class="question-actions">
+            <button id="prevQuestion" class="secondary-btn" type="button">Anterior</button>
+            <button id="nextQuestion" class="primary-btn" type="button">Próxima</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="resultView" class="view hidden">
+        <div id="resultContent"></div>
+      </section>
+
+      <section id="historyView" class="view hidden">
+        <div class="panel card">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow alt">Histórico</p>
+              <h2>Inspeções anteriores</h2>
+            </div>
+            <button class="primary-btn compact" data-view="newInspection">Nova inspeção</button>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
